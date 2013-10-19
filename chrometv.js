@@ -6,7 +6,7 @@ var setupSpreadsheetKey = '0AiEZezeUULf3dHVwZi16dmNtTzRRWDVodHNuTnRUdXc';
 
 function Channel(url, timeOnAir) {
 	this.url = url;
-	this.timeOnAir = timeOnAir;
+	this.timeOnAir = timeOnAir * 60 * 1000;
 }
 
 function loadChannels(feedJson) {
@@ -39,8 +39,6 @@ function changeChannel() {
 	
 	var channel = channels[currentChannel];
 	
-	alert(channel.url);
-	
 	chrome.tabs.update({
 		url : channel.url
 	});
@@ -48,6 +46,6 @@ function changeChannel() {
 	setTimeout(changeChannel, channel.timeOnAir);
 }
 
-chrome.runtime.onStartup.addListener(function(x) {
+chrome.runtime.onStartup.addListener(function() {
 	init();
 });

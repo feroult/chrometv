@@ -1,14 +1,1 @@
-tmp
-
-*.class
-.project
-.classpath
 .settings
-target
-test-output
-
-# Package Files #
-*.jar
-*.war
-*.ear
-
