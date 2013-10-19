@@ -1,0 +1,15 @@
+{
+  "manifest_version": 2,
+
+  "name": "chrometv ",
+  "description": "Chrome TV",
+  "version": "1.0",
+
+  "background": {
+    "scripts": ["jquery-2.0.3.min.js", "chrometv.js"]
+  },
+
+  "permissions": [
+    "tabs", "https://spreadsheets.google.com/"
+  ]
+}
