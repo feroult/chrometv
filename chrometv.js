@@ -1,6 +1,6 @@
 var currentChannel = -1;
 
-var channels = [ 'http://www.google.com', 'http://www.dextra.com.br' ];
+var channels = [];
 
 var setupSpreadsheetKey = '0AiEZezeUULf3dHVwZi16dmNtTzRRWDVodHNuTnRUdXc';
 
