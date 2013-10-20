@@ -1,4 +1,4 @@
-var chrometvURL = 'chrome://tv';
+var chrometvURL = 'chrome://tv'; // use chrome://tv?key=xxx
 
 var currentChannel = -1;
 
@@ -9,8 +9,8 @@ function Channel(url, timeOnAir) {
 	this.timeOnAir = timeOnAir * 60 * 1000;
 }
 
-function loadChannels(feedJson) {
-	var cells = feedJson.feed.entry;
+function loadChannels(json) {
+	var cells = json.feed.entry;
 	for (var i = 0; i < cells.length; i++) {
 		var cell = cells[i];
 		channels[i] = new Channel(cell.gsx$url.$t, cell.gsx$time.$t);
@@ -46,7 +46,7 @@ function changeChannel() {
 	setTimeout(changeChannel, channel.timeOnAir);
 }
 
-chrome.webNavigation.onBeforeNavigate.addListener(function(details) {	
+chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
 	if (details.url.indexOf(chrometvURL) == 0) {
 		chrome.tabs.update(details.tabId, {
 			url : 'about:blank'
