@@ -6,10 +6,10 @@
   "version": "1.0",
 
   "background": {
-    "scripts": ["jquery-2.0.3.min.js", "chrometv.js"]
+    "scripts": ["lib/jquery-2.0.3.min.js", "utils.js", "chrometv.js"]
   },
 
   "permissions": [
-    "tabs", "https://spreadsheets.google.com/"
+    "tabs", "webNavigation", "https://spreadsheets.google.com/"
   ]
 }

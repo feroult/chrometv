@@ -1,8 +1,8 @@
+var chrometvURL = 'chrome://tv';
+
 var currentChannel = -1;
 
 var channels = [];
-
-var setupSpreadsheetKey = '0AiEZezeUULf3dHVwZi16dmNtTzRRWDVodHNuTnRUdXc';
 
 function Channel(url, timeOnAir) {
 	this.url = url;
@@ -17,7 +17,7 @@ function loadChannels(feedJson) {
 	}
 }
 
-function init() {
+function init(setupSpreadsheetKey) {
 	$.ajax({
 		type : 'GET',
 		url : 'https://spreadsheets.google.com/feeds/list/'
@@ -36,9 +36,9 @@ function init() {
 
 function changeChannel() {
 	currentChannel = (currentChannel + 1) % channels.length;
-	
+
 	var channel = channels[currentChannel];
-	
+
 	chrome.tabs.update({
 		url : channel.url
 	});
@@ -46,6 +46,12 @@ function changeChannel() {
 	setTimeout(changeChannel, channel.timeOnAir);
 }
 
-chrome.runtime.onStartup.addListener(function() {
-	init();
+chrome.webNavigation.onBeforeNavigate.addListener(function(details) {	
+	if (details.url.indexOf(chrometvURL) == 0) {
+		chrome.tabs.update(details.tabId, {
+			url : 'about:blank'
+		});
+
+		init(getURLParameter(details.url, 'key'));
+	}
 });
