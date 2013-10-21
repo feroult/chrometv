@@ -12,5 +12,5 @@ Install unclutter, to hide mouser cursor
 Auto-start
 ```bash
   cd ~/.config/autostart
-  ln -s /home/pi/dextv/misc/dextv.desktop
+  ln -s /home/pi/chrometv/bin/chrometv_rpi.desktop
 
