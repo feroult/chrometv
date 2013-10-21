@@ -3,13 +3,17 @@
 
   "name": "chrometv ",
   "description": "Chrome TV",
-  "version": "1.0",
+  "version": "1.1",
 
   "background": {
-    "scripts": ["lib/jquery-2.0.3.min.js", "utils.js", "chrometv.js"]
+    "scripts": ["lib/jquery-2.0.3.min.js", "js/utils.js", "js/chrometv.js"]
   },
 
   "permissions": [
     "tabs", "webNavigation", "https://spreadsheets.google.com/"
-  ]
+  ],
+  
+  "icons": { 
+    "128": "images/icon_128.png" 
+  }
 }
