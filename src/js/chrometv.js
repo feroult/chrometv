@@ -104,6 +104,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
 
 chrome.runtime.onStartup.addListener(function() {
 	chrome.tabs.getSelected(function(tab) {
+		alert('url: ' + tab.url);
 		init(tab.id, tab.url);
 	});
 });
