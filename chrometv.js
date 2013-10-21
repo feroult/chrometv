@@ -1,6 +1,6 @@
-var CHROMETV_URL = 'chrome://tv'; // use chrome://tv?key=xxx
+var CHROMETV_URL = 'chrome.tv'; // use chrometv?key=xxx
 
-var WAIT_LOAD_DELAY = 70 * 1000;
+var WAIT_LOAD_DELAY = 5 * 1000;
 
 var currentChannel = -1;
 
@@ -12,7 +12,7 @@ var tabs = [];
 
 function Channel(url, timeOnAir) {
 	this.url = url;
-	this.timeOnAir = (timeOnAir * 60 * 1000) + WAIT_LOAD_DELAY;
+	this.timeOnAir = /* (timeOnAir * 60 * 1000) */10000 + WAIT_LOAD_DELAY;
 }
 
 function loadChannels(json) {
@@ -81,13 +81,29 @@ function initTabs(currentTabId) {
 	});
 }
 
-chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
-	if (details.url.indexOf(CHROMETV_URL) == 0) {
-		chrome.tabs.update(details.tabId, {
-			url : 'about:blank'
-		});
-
-		initTabs(details.tabId);
-		initChannels(getURLParameter(details.url, 'key'));
+function init(tabId, url) {
+	if (!isChromeTV(url)) {
+		return;
 	}
+
+	chrome.tabs.update(tabId, {
+		url : 'about:blank'
+	});
+
+	initTabs(tabId);
+	initChannels(getURLParameter(url, 'key'));
+}
+
+function isChromeTV(url) {
+	return url.indexOf('//' + CHROMETV_URL + '/') != -1;
+}
+
+chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
+	init(details.tabId, details.url);
+});
+
+chrome.runtime.onStartup.addListener(function() {
+	chrome.tabs.getSelected(function(tab) {
+		init(tab.id, tab.url);
+	});
 });
