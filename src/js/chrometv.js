@@ -85,7 +85,7 @@ function init(tabId, url) {
 	if (!isChromeTV(url)) {
 		return;
 	}
-
+	
 	chrome.tabs.update(tabId, {
 		url : 'about:blank'
 	});
@@ -98,14 +98,8 @@ function isChromeTV(url) {
 	return url.indexOf('//' + CHROMETV_URL + '/') != -1;
 }
 
-chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
-	init(details.tabId, details.url);
-});
-
-chrome.runtime.onStartup.addListener(function() {
-	alert('x');
+chrome.tabs.onUpdated.addListener(function(tab) {
 	chrome.tabs.getSelected(function(tab) {
-		alert('url: ' + tab.url);
 		init(tab.id, tab.url);
-	});
+	});		
 });

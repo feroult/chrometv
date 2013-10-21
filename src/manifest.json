@@ -10,7 +10,7 @@
   },
 
   "permissions": [
-    "tabs", "webNavigation", "https://spreadsheets.google.com/"
+    "tabs", "webNavigation", "webRequest", "*://chrome.tv/", "https://spreadsheets.google.com/"    
   ],
   
   "icons": { 
