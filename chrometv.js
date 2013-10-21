@@ -1,12 +1,18 @@
-var chrometvURL = 'chrome://tv'; // use chrome://tv?key=xxx
+var CHROMETV_URL = 'chrome://tv'; // use chrome://tv?key=xxx
+
+var WAIT_LOAD_DELAY = 70 * 1000;
 
 var currentChannel = -1;
 
 var channels = [];
 
+var currentTab = -1;
+
+var tabs = [];
+
 function Channel(url, timeOnAir) {
 	this.url = url;
-	this.timeOnAir = timeOnAir * 60 * 1000;
+	this.timeOnAir = (timeOnAir * 60 * 1000) + WAIT_LOAD_DELAY;
 }
 
 function loadChannels(json) {
@@ -17,7 +23,7 @@ function loadChannels(json) {
 	}
 }
 
-function init(setupSpreadsheetKey) {
+function initChannels(setupSpreadsheetKey) {
 	$.ajax({
 		type : 'GET',
 		url : 'https://spreadsheets.google.com/feeds/list/'
@@ -35,23 +41,53 @@ function init(setupSpreadsheetKey) {
 }
 
 function changeChannel() {
-	currentChannel = (currentChannel + 1) % channels.length;
+	var channel = nextChannel();
+	var tab = nextTab();
 
-	var channel = channels[currentChannel];
-
-	chrome.tabs.update({
+	chrome.tabs.update(tab.id, {
 		url : channel.url
 	});
 
+	setTimeout(changeTab, WAIT_LOAD_DELAY);
 	setTimeout(changeChannel, channel.timeOnAir);
 }
 
+function changeTab() {
+	var tab = tabs[currentTab];
+	chrome.tabs.update(tab.id, {
+		active : true
+	});
+}
+
+function nextChannel() {
+	currentChannel = (currentChannel + 1) % channels.length;
+	return channels[currentChannel];
+}
+
+function nextTab() {
+	currentTab = (currentTab + 1) % tabs.length;
+	return tabs[currentTab];
+}
+
+function initTabs(currentTabId) {
+	chrome.tabs.get(currentTabId, function(tab) {
+		tabs.push(tab);
+	});
+
+	chrome.tabs.create({
+		active : false
+	}, function(tab) {
+		tabs.push(tab);
+	});
+}
+
 chrome.webNavigation.onBeforeNavigate.addListener(function(details) {
-	if (details.url.indexOf(chrometvURL) == 0) {
+	if (details.url.indexOf(CHROMETV_URL) == 0) {
 		chrome.tabs.update(details.tabId, {
 			url : 'about:blank'
 		});
 
-		init(getURLParameter(details.url, 'key'));
+		initTabs(details.tabId);
+		initChannels(getURLParameter(details.url, 'key'));
 	}
 });
