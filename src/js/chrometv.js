@@ -75,7 +75,8 @@ function initTabs(currentTabId) {
 	});
 
 	chrome.tabs.create({
-		active : false
+		active : false,
+		url : 'about:blank'
 	}, function(tab) {
 		tabs.push(tab);
 	});
