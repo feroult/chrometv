@@ -1,4 +1,4 @@
-var CHROMETV_URL = 'chrome.tv'; // use chrometv?key=xxx
+var CHROMETV_URL = 'chrome.tv'; // use chrome.tv?key=xxx
 
 var WAIT_LOAD_DELAY = 5 * 1000;
 
@@ -12,7 +12,7 @@ var tabs = [];
 
 function Channel(url, timeOnAir) {
 	this.url = url;
-	this.timeOnAir = /* (timeOnAir * 60 * 1000) */10000 + WAIT_LOAD_DELAY;
+	this.timeOnAir = (timeOnAir * 60 * 1000) + WAIT_LOAD_DELAY;
 }
 
 function loadChannels(json) {
