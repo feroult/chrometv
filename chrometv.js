@@ -1,6 +1,6 @@
 var CHROMETV_URL = 'chrome.tv'; // use chrome.tv?key=xxx
 
-var WAIT_LOAD_DELAY = 5 * 1000;
+var WAIT_LOAD_DELAY = 70 * 1000;
 
 var currentChannel = -1;
 
