@@ -10,7 +10,7 @@
   },
 
   "permissions": [
-    "tabs", "https://spreadsheets.google.com/"    
+    "tabs", "webNavigation", "https://spreadsheets.google.com/"    
   ],
   
   "icons": { 

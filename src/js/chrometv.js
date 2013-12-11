@@ -1,4 +1,5 @@
-var CHROMETV_URL = 'chrome.tv'; // use chrome.tv?key=xxx
+var CHROMETV_URL = 'chrome.tv'; // use http://chrome.tv?key=xxx
+var GOOGLE_LOGIN_URL = 'accounts.google.com'; // use http://chrome.tv?key=xxx
 
 var WAIT_LOAD_DELAY = 70 * 1000;
 
@@ -95,12 +96,24 @@ function init(tabId, url) {
 	initChannels(getURLParameter(url, 'key'));
 }
 
-function isChromeTV(url) {
-	return url.indexOf('//' + CHROMETV_URL + '/') != -1;
-}
-
 chrome.tabs.onUpdated.addListener(function(tab) {
 	chrome.tabs.getSelected(function(tab) {
 		init(tab.id, tab.url);
 	});		
 });
+
+chrome.webNavigation.onCompleted.addListener(function(details) {
+	/*
+	 * if (!isGoogleLogin(url)) { return; }
+	 */
+	alert('ha');
+});
+
+
+function isChromeTV(url) {
+	return url.indexOf('//' + CHROMETV_URL + '/') != -1;
+}
+
+function isGoogleLogin(url) {
+	return url.indexOf('//' + GOOGLE_LOGIN_URL + '/') != -1;
+}
