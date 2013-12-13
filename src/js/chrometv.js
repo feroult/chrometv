@@ -102,11 +102,10 @@ chrome.tabs.onUpdated.addListener(function(tab) {
 	});		
 });
 
-chrome.webNavigation.onCompleted.addListener(function(details) {
-	/*
-	 * if (!isGoogleLogin(url)) { return; }
-	 */
-	alert('ha');
+chrome.webNavigation.onCompleted.addListener(function(details) {	
+	if (isGoogleLogin(details.url)) { 
+		alert('ha');
+	}	 	
 });
 
 
