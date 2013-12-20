@@ -11,6 +11,10 @@ var currentTab = -1;
 
 var tabs = [];
 
+var googleUser = 'foo';
+
+var googlePassword = 'bar';
+
 function Channel(url, timeOnAir) {
 	this.url = url;
 	this.timeOnAir = (timeOnAir * 60 * 1000) + WAIT_LOAD_DELAY;
@@ -92,8 +96,16 @@ function init(tabId, url) {
 		url : 'about:blank'
 	});
 
+	initGoogle(getURLParameter(url, 'user'), getURLParameter(url, 'password'));		
 	initTabs(tabId);
 	initChannels(getURLParameter(url, 'key'));
+}
+
+
+
+function initGoogle(user, password) {
+	googleUser = user;
+	googlePassword = password;
 }
 
 chrome.tabs.onUpdated.addListener(function(tab) {
@@ -103,11 +115,23 @@ chrome.tabs.onUpdated.addListener(function(tab) {
 });
 
 chrome.webNavigation.onCompleted.addListener(function(details) {	
-	if (isGoogleLogin(details.url)) { 
-		alert('ha');
+	if (isGoogleLogin(details.url)) {
+		exeucuteGoogleLoginScript();
 	}	 	
 });
 
+function exeucuteGoogleLoginScript() {
+	$.get(
+		'js/google_login.js', function(code) { 
+		    code += "\n"
+		    code += "doGoogleLogin('" + googleUser + "', '" + googlePassword + "');";
+			chrome.tabs.getSelected(null, function(tab) {
+			    chrome.tabs.executeScript(tab.id, {code: code}, function(response) {	
+			    });
+			});		    
+	    } 
+	);
+}
 
 function isChromeTV(url) {
 	return url.indexOf('//' + CHROMETV_URL + '/') != -1;
