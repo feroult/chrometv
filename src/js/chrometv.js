@@ -114,11 +114,11 @@ chrome.tabs.onUpdated.addListener(function(tab) {
 	});		
 });
 
-chrome.webNavigation.onCompleted.addListener(function(details) {	
-	if (isGoogleLogin(details.url)) {
-		exeucuteGoogleLoginScript();
-	}	 	
-});
+//chrome.webNavigation.onCompleted.addListener(function(details) {	
+//	if (isGoogleLogin(details.url)) {
+//		exeucuteGoogleLoginScript();
+//	}	 	
+//});
 
 function exeucuteGoogleLoginScript() {
 	$.get(
