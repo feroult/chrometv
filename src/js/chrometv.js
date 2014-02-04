@@ -31,16 +31,14 @@ function loadChannels(json) {
 function initChannels(setupSpreadsheetKey) {
 	$.ajax({
 		type : 'GET',
-		url : 'https://spreadsheets.google.com/feeds/list/'
-				+ setupSpreadsheetKey + '/1/public/values?alt=json',
+		url : 'https://spreadsheets.google.com/feeds/list/' + setupSpreadsheetKey + '/1/public/values?alt=json',
 		dataType : 'json',
 		success : function(json) {
 			loadChannels(json);
 			changeChannel();
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
-			alert('(' + jqXHR.status + ' ' + jqXHR.statusText + ') '
-					+ jqXHR.responseText);
+			alert('(' + jqXHR.status + ' ' + jqXHR.statusText + ') ' + jqXHR.responseText);
 		}
 	});
 }
@@ -91,17 +89,15 @@ function init(tabId, url) {
 	if (!isChromeTV(url)) {
 		return;
 	}
-	
+
 	chrome.tabs.update(tabId, {
 		url : 'about:blank'
 	});
 
-	initGoogle(getURLParameter(url, 'user'), getURLParameter(url, 'password'));		
+	initGoogle(getURLParameter(url, 'user'), getURLParameter(url, 'password'));
 	initTabs(tabId);
 	initChannels(getURLParameter(url, 'key'));
 }
-
-
 
 function initGoogle(user, password) {
 	googleUser = user;
@@ -111,27 +107,35 @@ function initGoogle(user, password) {
 chrome.tabs.onUpdated.addListener(function(tab) {
 	chrome.tabs.getSelected(function(tab) {
 		init(tab.id, tab.url);
-	});		
+	});
 });
 
-//chrome.webNavigation.onCompleted.addListener(function(details) {	
-//	if (isGoogleLogin(details.url)) {
-//		exeucuteGoogleLoginScript();
-//	}	 	
-//});
+// chrome.webNavigation.onCompleted.addListener(function(details) {
+// if (isGoogleLogin(details.url)) {
+// exeucuteGoogleLoginScript();
+// }
+// });
 
 function exeucuteGoogleLoginScript() {
-	$.get(
-		'js/google_login.js', function(code) { 
-		    code += "\n"
-		    code += "doGoogleLogin('" + googleUser + "', '" + googlePassword + "');";
-			chrome.tabs.getSelected(null, function(tab) {
-			    chrome.tabs.executeScript(tab.id, {code: code}, function(response) {	
-			    });
-			});		    
-	    } 
-	);
+	$.get('js/google_login.js', function(code) {
+		code += "\n"
+		code += "doGoogleLogin('" + googleUser + "', '" + googlePassword + "');";
+		chrome.tabs.getSelected(null, function(tab) {
+			chrome.tabs.executeScript(tab.id, {
+				code : code
+			}, function(response) {
+			});
+		});
+	});
 }
+
+chrome.webNavigation.onDOMContentLoaded.addListener(function(details) {
+	chrome.tabs.insertCSS(details.tabId, {
+		code : "html { overflow: hidden; } #header { display: none; } #footer { display: none; }"
+	}, function(response) {
+		//alert(details.tabId + ', '+ response);
+	});
+});
 
 function isChromeTV(url) {
 	return url.indexOf('//' + CHROMETV_URL + '/') != -1;
