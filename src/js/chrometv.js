@@ -110,32 +110,33 @@ chrome.tabs.onUpdated.addListener(function(tab) {
 	});
 });
 
-// chrome.webNavigation.onCompleted.addListener(function(details) {
-// if (isGoogleLogin(details.url)) {
-// exeucuteGoogleLoginScript();
-// }
-// });
+chrome.webNavigation.onDOMContentLoaded.addListener(function(details) {
+	if (isGoogleLogin(details.url)) {
+		exeucuteGoogleLoginScript(details.tabId);
+		return;
+	}
 
-function exeucuteGoogleLoginScript() {
+	removeGoogleDocsHeaders(details.tabId);
+});
+
+function exeucuteGoogleLoginScript(tabId) {
 	$.get('js/google_login.js', function(code) {
 		code += "\n"
 		code += "doGoogleLogin('" + googleUser + "', '" + googlePassword + "');";
-		chrome.tabs.getSelected(null, function(tab) {
-			chrome.tabs.executeScript(tab.id, {
-				code : code
-			}, function(response) {
-			});
+		chrome.tabs.executeScript(tabId, {
+			code : code
+		}, function(response) {
 		});
 	});
 }
 
-chrome.webNavigation.onDOMContentLoaded.addListener(function(details) {
-	chrome.tabs.insertCSS(details.tabId, {
+function removeGoogleDocsHeaders(tabId) {
+	chrome.tabs.insertCSS(tabId, {
 		code : "html { overflow: hidden; } #header { display: none; } #footer { display: none; }"
 	}, function(response) {
-		//alert(details.tabId + ', '+ response);
+		// alert(details.tabId + ', '+ response);
 	});
-});
+}
 
 function isChromeTV(url) {
 	return url.indexOf('//' + CHROMETV_URL + '/') != -1;
