@@ -9,11 +9,11 @@
     "scripts": ["lib/jquery-2.0.3.min.js", "js/utils.js", "js/chrometv.js"]
   },
 
-  "permissions": [    
-    "tabs", "webNavigation", "https://spreadsheets.google.com/", "https://accounts.google.com/", "https://docs.google.com/"
+  "permissions": [
+    "tabs", "webNavigation", "https://spreadsheets.google.com/", "https://accounts.google.com/", "https://docs.google.com/", "http://www.dextra.com.br/"
   ],
-  
-  "icons": { 
-    "128": "images/icon_128.png" 
+
+  "icons": {
+    "128": "images/icon_128.png"
   }
 }
