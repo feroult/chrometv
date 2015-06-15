@@ -1,5 +1,6 @@
 var CHROMETV_URL = 'www.dextra.com.br'; // use http://www.dextra.com.br?key=xxx
-var GOOGLE_LOGIN_URL = 'accounts.google.com'; // use http://chrome.tv?key=xxx
+var GOOGLE_LOGIN_URL = 'accounts.google.com'; 
+var APP_ENGINE_URL = 'appengine.google.com';
 
 var WAIT_LOAD_DELAY = 70 * 1000;
 
@@ -111,9 +112,14 @@ chrome.tabs.onUpdated.addListener(function(tab) {
 });
 
 chrome.webNavigation.onDOMContentLoaded.addListener(function(details) {
-    if (isGoogleLogin(details.url)) {
+    var url = details.url;
+    if (isGoogleLogin(url)) {
         exeucuteGoogleLoginScript(details.tabId);
         return;
+    }
+    if (isRequestingPermission(url)) {
+        grantPermission(details.tabId);
+	    return;
     }
 
     removeGoogleDocsHeaders(details.tabId);
@@ -138,10 +144,23 @@ function removeGoogleDocsHeaders(tabId) {
     });
 }
 
+function grantPermission(tabId) {
+    $.get('js/google_permission.js', function(code) {
+    	chrome.tabs.executeScript(tabId, {
+            code: code
+    	}, function(response) {
+    	});
+    });	
+}
+
 function isChromeTV(url) {
     return url.indexOf('//' + CHROMETV_URL + '/') != -1;
 }
 
 function isGoogleLogin(url) {
     return url.indexOf('//' + GOOGLE_LOGIN_URL + '/') != -1;
+}
+
+function isRequestingPermission(url) {
+    return url.indexOf('//' + APP_ENGINE_URL + '/') != -1;
 }
