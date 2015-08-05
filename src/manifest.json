@@ -10,7 +10,10 @@
   },
 
   "permissions": [
-    "tabs", "webNavigation", "https://spreadsheets.google.com/", "https://accounts.google.com/", "https://docs.google.com/", "http://www.dextra.com.br/", "https://appengine.google.com/"
+    "tabs", "webNavigation", "http://www.google.com.br/",
+    "https://spreadsheets.google.com/", "https://accounts.google.com/",
+    "https://docs.google.com/", "http://www.dextra.com.br/",
+    "http://dextra.com.br/", "https://appengine.google.com/"
   ],
 
   "icons": {
