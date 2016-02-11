@@ -9,11 +9,15 @@ function waitPasswordAndSignIn(password) {
         }, 300);
         return;
     }
+
     getById('Passwd').value = password;
     getById('signIn').click();
 }
 
 function doGoogleLogin(user, password) {
+
+   waitPasswordAndSignIn(password);
+
     if(getById('Email')) {
         getById('Email').value = user;
     }
@@ -23,5 +27,7 @@ function doGoogleLogin(user, password) {
             waitPasswordAndSignIn(password);
         }, 300);
         getById('next').click();
+
     }
+
 }
